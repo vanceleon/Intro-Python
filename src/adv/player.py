@@ -6,3 +6,4 @@ class Player:
     """Holds information about a player"""
     def __init__(self, startRoom):
         self.curRoom = startRoom
+        self.contents = []

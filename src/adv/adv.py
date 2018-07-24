@@ -1,6 +1,7 @@
 import textwrap
 from room import Room
 from player import Player
+from item import Treasure
 
 # Declare all the rooms
 
@@ -19,8 +20,7 @@ the distance, but there is no way across the chasm."""),
 to north. The smell of gold permeates the air."""),
 
     'treasure': Room("Treasure Chamber", """You've found the long-lost treasure
-chamber! Sadly, it has already been completely emptied by
-earlier adventurers. The only exit is to the south."""),
+chamber! The only exit is to the south."""),
 }
 
 
@@ -34,6 +34,14 @@ room['overlook'].s_to = room['foyer']
 room['narrow'].w_to = room['foyer']
 room['narrow'].n_to = room['treasure']
 room['treasure'].s_to = room['narrow']
+
+# Add some items
+
+t = Treasure("coins", "Shiny coins", 100)
+room['overlook'].contents.append(t)
+
+t = Treasure("silver", "Tarnished silver", 200)
+room['treasure'].contents.append(t)
 
 
 def tryDirection(d, curRoom):
@@ -54,6 +62,16 @@ def tryDirection(d, curRoom):
     print("You can't go that way")
 
     return curRoom
+
+def find_item(name, curRoom):
+    """
+    Search the current room to see if we can locate the treasure in question.
+    """
+    for i in curRoom.contents:
+        if i.name == name:
+            return i
+
+    return None
 
 #
 # Main
@@ -84,13 +102,56 @@ while not done:
     for line in textwrap.wrap(player.curRoom.description):
         print(line)
 
-    # User prompt
-    s = input("\nCommand> ").strip().lower()
+    # Print any items found in the room
+    if len(player.curRoom.contents) > 0:
+        print("\nYou also see:\n")
+        for i in player.curRoom.contents:
+            print("     " + str(i))
 
-    # Handle input
-    if s == "q":
-        done = True
-    elif s in ["n", "s", "w", "e"]:
-        player.curRoom = tryDirection(s, player.curRoom)
-    else:
-        print("Unknown command {}".format(s))
+    # User prompt
+    s = input("\nCommand> ").strip().lower().split()
+
+    if len(s) > 2 or len(s) < 1:
+        print("I don't understand that.")
+        continue
+
+    # Intransitive verbs
+    if len(s) == 1:
+        if s[0] == "quit" or s[0] == "q":
+            done = True
+        elif s[0] == "inventory" or s[0] == "i":
+            if len(player.contents) == 0:
+                print("You're not carrying anything.")
+            else:
+                print("You are carrying:\n")
+                for i in player.contents:
+                    print(f"    {i}")
+
+        elif s[0] in ["n", "s", "w", "e"]:
+            player.curRoom = tryDirection(s[0], player.curRoom)
+        else:
+            print("Unknown command {}".format(' '.join(s)))
+    
+    # Transitive verbs
+    elif len(s) == 2:
+        if s[0] == 'get' or s[0] == 'take':
+            item = find_item(s[1], player.curRoom)
+            if item == None:
+                print("I don't see that here.")
+            else:
+                # Move from room to player
+                player.curRoom.contents.remove(item)
+                player.contents.append(item)
+                print(f"{item}: taken.")
+
+        elif s[0] == 'drop':
+            item = find_item(s[1], player)
+            if item == None:
+                print("You're not carrying that.")
+            else:
+                # Move from player to room
+                player.contents.remove(item)
+                player.curRoom.contents.append(item)
+                print(f"{item}: dropped.")
+        else:
+            print("Unknown command {}".format(' '.join(s)))
