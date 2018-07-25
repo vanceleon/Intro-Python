@@ -4,10 +4,6 @@ class Item:
         self.name = name
         self.description = description
 
-    def on_encounter(self, player):
-        """Called every time the player encounters the item."""
-        pass
-
     def on_take(self, player):
         """Called every time the player takes an item."""
         pass
@@ -24,14 +20,15 @@ class Treasure(Item):
         super().__init__(name, description)
 
     def on_take(self, player):
+        super().on_take(player)
+
         if not self.picked_up:
             player.score += self.value
             print(f"You get {self.value} points!")
             self.picked_up = True
-        super().on_take(player)
 
 class LightSource(Item):
     """An item that casts light."""
     def __init__(self, name, description):
-        self.lightsource = True
         super().__init__(name, description)
+        self.lightsource = True

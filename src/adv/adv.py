@@ -103,7 +103,7 @@ while not done:
     # Make a list of all the items the player has (or are in the room) that are
     # light sources:
     light_sources = [item for item in player.contents + player.curRoom.contents
-                     if hasattr(item, "lightsource") and item.lightsource]
+                     if isinstance(item, LightSource) and item.lightsource]
 
     is_light = player.curRoom.is_light or len(light_sources) > 0
 
