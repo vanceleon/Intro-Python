@@ -26,10 +26,12 @@ class Treasure(Item):
     def on_take(self, player):
         if not self.picked_up:
             player.score += self.value
+            print(f"You get {self.value} points!")
             self.picked_up = True
-        super().on_take(self, player)
+        super().on_take(player)
 
 class LightSource(Item):
+    """An item that casts light."""
     def __init__(self, name, description):
         self.lightsource = True
         super().__init__(name, description)

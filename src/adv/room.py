@@ -6,6 +6,6 @@ class Room:
     def __init__(self, name, description):
         self.name = name
         self.description = description
-        self.score = 0
+        self.is_light = False
 
         self.contents = []

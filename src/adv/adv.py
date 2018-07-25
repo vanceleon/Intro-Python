@@ -1,7 +1,7 @@
 import textwrap
 from room import Room
 from player import Player
-from item import Treasure
+from item import Treasure, LightSource
 
 # Declare all the rooms
 
@@ -35,6 +35,9 @@ room['narrow'].w_to = room['foyer']
 room['narrow'].n_to = room['treasure']
 room['treasure'].s_to = room['narrow']
 
+room['outside'].is_light = True
+room['foyer'].is_light = True
+
 # Add some items
 
 t = Treasure("coins", "Shiny coins", 100)
@@ -43,6 +46,8 @@ room['overlook'].contents.append(t)
 t = Treasure("silver", "Tarnished silver", 200)
 room['treasure'].contents.append(t)
 
+l = LightSource("lamp", "Brass lamp")
+room['foyer'].contents.append(l)
 
 def tryDirection(d, curRoom):
     """
@@ -95,18 +100,28 @@ player = Player(room['outside'])
 done = False
 
 while not done:
-    # Print the room name
-    print("\n{}\n".format(player.curRoom.name))
+    # Make a list of all the items the player has (or are in the room) that are
+    # light sources:
+    light_sources = [item for item in player.contents + player.curRoom.contents
+                     if hasattr(item, "lightsource") and item.lightsource]
 
-    # Print the room description
-    for line in textwrap.wrap(player.curRoom.description):
-        print(line)
+    is_light = player.curRoom.is_light or len(light_sources) > 0
 
-    # Print any items found in the room
-    if len(player.curRoom.contents) > 0:
-        print("\nYou also see:\n")
-        for i in player.curRoom.contents:
-            print("     " + str(i))
+    if is_light:
+        # Print the room name
+        print("\n{}\n".format(player.curRoom.name))
+
+        # Print the room description
+        for line in textwrap.wrap(player.curRoom.description):
+            print(line)
+
+        # Print any items found in the room
+        if len(player.curRoom.contents) > 0:
+            print("\nYou also see:\n")
+            for i in player.curRoom.contents:
+                print("     " + str(i))
+    else:
+        print("\nIt's pitch dark!\n")
 
     # User prompt
     s = input("\nCommand> ").strip().lower().split()
@@ -127,6 +142,9 @@ while not done:
                 for i in player.contents:
                     print(f"    {i}")
 
+        elif s[0] == "score":
+            print(f"Your score is currently {player.score}.")
+
         elif s[0] in ["n", "s", "w", "e"]:
             player.curRoom = tryDirection(s[0], player.curRoom)
         else:
@@ -135,14 +153,20 @@ while not done:
     # Transitive verbs
     elif len(s) == 2:
         if s[0] == 'get' or s[0] == 'take':
-            item = find_item(s[1], player.curRoom)
-            if item == None:
-                print("I don't see that here.")
+            if is_light:
+                item = find_item(s[1], player.curRoom)
+                if item == None:
+                    print("I don't see that here.")
+                else:
+                    # Notify the item that it's about to be taken
+                    item.on_take(player)
+
+                    # Move from room to player
+                    player.curRoom.contents.remove(item)
+                    player.contents.append(item)
+                    print(f"{item}: taken.")
             else:
-                # Move from room to player
-                player.curRoom.contents.remove(item)
-                player.contents.append(item)
-                print(f"{item}: taken.")
+                print("Good luck finding that in the dark.")
 
         elif s[0] == 'drop':
             item = find_item(s[1], player)

@@ -7,3 +7,4 @@ class Player:
     def __init__(self, startRoom):
         self.curRoom = startRoom
         self.contents = []
+        self.score = 0
