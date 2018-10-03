@@ -54,24 +54,25 @@ room['treasure'].s_to = room['narrow']
 # If the user enters "q", quit the game.
 # d = Player(input("Where do you want to go? "))
 
-s  = Player(room["outside"])
+s  = Player(input ("What is your name? "), room["outside"])
+
 direction_dictionary = {"n": "north", "s": "south", "w": "west", "e": "east" }
 
 while True: 
-    # print(vars(d))
     print(f"You are currently in {s.currentRoom.name}")
     cmd = input("->")
     
     if cmd == "q":
         break
+
+# check for casing
     elif cmd == "n" or cmd == "s" or cmd == "w" or cmd == "e":
         s.currentRoom = getattr(s.currentRoom, f"{cmd}_to")
-        # getattr(s["currentRoom"], cmd)
-        # [f"{cmd}_to"]        
         print(f"You are currently in {s.currentRoom.name}")
         print(f"Description: {s.currentRoom.description}")
+# this is a handler for wrong direction errors
+    # elif s.currentRoom[f"{cmd}_to"] == false:
+    #     print("can't go that way")
     else: 
         print("invalid input") 
-    # s.currentRoom[`${cmd}_to`]
-    # if cmd:
-
+   
