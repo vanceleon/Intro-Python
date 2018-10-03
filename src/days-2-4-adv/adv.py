@@ -36,6 +36,16 @@ room['narrow'].w_to = room['foyer']
 room['narrow'].n_to = room['treasure']
 room['treasure'].s_to = room['narrow']
 
+
+# assigning the items to the room
+room['narrow'].items = ["100 coins", "sword"] 
+room['outside'].items = ["rock", "map"] 
+room['foyer'].items = ["compass"] 
+room['treasure'].items = ["1000 coins", "sword"] 
+room['overlook'].items = ["100 coins", "sword"] 
+
+
+
 #
 # Main
 #
@@ -56,23 +66,24 @@ room['treasure'].s_to = room['narrow']
 
 s  = Player(input ("What is your name? "), room["outside"])
 
-direction_dictionary = {"n": "north", "s": "south", "w": "west", "e": "east" }
+direction_dictionary = {"n": "north", "s": "south", "w": "west", "e": "east", "forward": "n", "backwards": "s", "right": "e", "left": "w"  }
 
 while True: 
     print(f"You are currently in {s.currentRoom.name}")
-    cmd = input("->")
-    
-    if cmd == "q":
-        break
+    cmd = input("->").lower()
+    if len(cmd) == 1:
+        if cmd == "q":
+            break
+        elif cmd in direction_dictionary:
+            s.currentRoom = getattr(s.currentRoom, f"{cmd}_to")
+            print(f"You are currently in {s.currentRoom.name}")
+            print(f"Description: {s.currentRoom.description}")
+        else: 
+            print("I don't understand that command")
+    else:
+        if cmd == "look":
+            if cmd == "q":
+                player.look(direction_dictionary[cmd])
+        else:
+            print("I did not understand that command.") 
 
-# check for casing
-    elif cmd == "n" or cmd == "s" or cmd == "w" or cmd == "e":
-        s.currentRoom = getattr(s.currentRoom, f"{cmd}_to")
-        print(f"You are currently in {s.currentRoom.name}")
-        print(f"Description: {s.currentRoom.description}")
-# this is a handler for wrong direction errors
-    # elif s.currentRoom[f"{cmd}_to"] == false:
-    #     print("can't go that way")
-    else: 
-        print("invalid input") 
-   

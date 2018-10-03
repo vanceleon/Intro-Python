@@ -1,67 +1,76 @@
-import random
+            
+check for casing
+this is a handler for wrong direction errors
+    elif s.currentRoom[f"{cmd}_to"] == false:
+        print("can't go that way")
 
 
-class Player():
-    def __init__(self,name):
+Implement a class to hold room information. This should have name and
+description attributes.
+class Room:
+    def __init__(self, name, description):
         self.name = name
-        self.wins = 0
-        self.losses = 0
-        self.ties = 0
+        self.description = description
+        self.n_to = None
+        self.s_to = None
+        self.e_to = None
+        self.w_to = None
     def __str__(self):
-        return f"\n{self.name}\n{self.wins} - {self.losses} - {self.ties}\n"
-    def addResult(self, result):
-        if result == 1:
-            self.wins += 1
-        elif result == 0:
-            self.ties += 1
-        elif result == -1:
-            self.losses += 1
-def get_random_rps():
-    rps = ["r", "p", "s"]
-    return rps[random.randrange(0,3)]
+        return f"\n\n{self.name}\n\n   {self.description}\n"
+    def getRoomInDirection(self, direction):
+        if direction == "n":
+            return self.n_to
+        elif direction == "s":
+            return self.s_to
+        elif direction == "e":
+            return self.e_to
+        elif direction == "w":
+            return self.w_to
+        else:
+            return None
 
-def eval_rps(player_cmd, computer_cmd):
-    if player_cmd == "r":
-        if computer_cmd == "p":
-            return -1
-        elif computer_cmd == "s":
-            return 1
-        elif computer_cmd == "r":
-            return 0
-    elif player_cmd == "p":
-        if computer_cmd == "p":
-            return 0
-        elif computer_cmd == "s":
-            return -1
-        elif computer_cmd == "r":
-            return 1
-    elif player_cmd == "s":
-        if computer_cmd == "p":
-            return 1
-        elif computer_cmd == "s":
-            return 0
-        elif computer_cmd == "r":
-            return -1
+class Player:
+    def __init__(self, name, currentRoom):
+        self.name = name
+        self.currentRoom = currentRoom
+    def travel(self, direction):
+        nextRoom = self.currentRoom.getRoomInDirection(direction)
+        if nextRoom is not None:
+            self.currentRoom = nextRoom
+            print(nextRoom)
+        else:
+            print("You cannot move in that direction.")
+    def look(self, direction=None):
+        if direction is None:
+            print(self.currentRoom)
+        else:
+            nextRoom = self.currentRoom.getRoomInDirection(direction)
+            if nextRoom is not None:
+                print(nextRoom)
+            else:
+                print("There is nothing there.")
 
-choice_dictionary = {"r": "rock", "p": "paper", "s": "scissors"}
-p = Player(input("What is your name? "))
+
+valid_directions = {"n": "n", "s": "s", "e": "e", "w": "w",
+                    "forward": "n", "backwards": "s", "right": "e", "left": "w"}
+
+player = Player(input("What is your name? "), room['outside'])
+print(player.currentRoom)
 
 while True:
-    agent_choice = get_random_rps()
-    print(p)
-    cmd = input("-> ")
-    if cmd == "q":
-        break
-    elif cmd == "r" or cmd == "p" or cmd == "s":
-      result = eval_rps(cmd, agent_choice)
-      print(f"You chose {choice_dictionary[cmd]}")
-      print(f"Computer chose {choice_dictionary[agent_choice]}")
-      p.addResult(result)
-      if result == 1:
-          print("You win!")
-      elif result == 0:
-          print("Tie")
-      else:
-          print("You lose")
+    cmds = input("-> ").lower().split(" ")
+    if len(cmds) == 1:
+        if cmds[0] == "q":
+            break
+        elif cmds[0] in valid_directions:
+            player.travel(valid_directions[cmds[0]])
+        elif cmds[0] == "look":
+            player.look()
+        else:
+            print("I did not understand that command.")
     else:
-        print("I did not understand that command.")
+        if cmds[0] == "look":
+            if cmds[1] in valid_directions:
+                player.look(valid_directions[cmds[1]])
+        else:
+            print("I did not understand that command.")
