@@ -16,6 +16,15 @@ class Room:
 
     def __str__(self):
         return f"\n\n{self.name}\n\n {self.description}\n\n {self.items}\n"
+    def printRoomDescription(self, player):
+        if player.hasLight():
+            print(str(self))
+        else:
+            print("You cannot see anything.")
+    
+    def getItemString(self):
+        return f"The room contains: {', '.join([item.name for item in self.items])}"
+
     def getRoomInDirection(self, direction):
         if direction == "n":
             return self.n_to
@@ -28,6 +37,17 @@ class Room:
         else:
             return None
     
+    def addItem(self, item):
+        self.items.append(item)
+    
+    def removeItem(self, item):
+        self.items.remove(item)
+    
+    def findItem(self, name):
+        for item in self.items:
+            if item.name.lower() == name.lower():
+                return item
+        return None
 
 
 """

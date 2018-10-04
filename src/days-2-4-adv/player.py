@@ -6,7 +6,9 @@ class Player:
     def __init__(self, name, roomStart, startingItems=[]):
         self.name = name
         self.currentRoom = roomStart
-        self.inventory = []
+        self.inventory = startingItems
+        self.strength = 15
+
 
     def travel(self, direction):
         nextRoom = self.currentRoom.getRoomInDirection(direction)
@@ -24,8 +26,34 @@ class Player:
                 print(nextRoom)
             else: 
                 print("There is nothing there")
+    def checkStatus(self):
+        print(f"Your name is {self.name}, your strength is {self.strength}")
+    
+    def checkInventory(self):
+        print("You are carrying: \n")
+        for inventory in self.inventory:
+            print(f"{inventory.name} - {inventory.description}")
 
-    # def pickup_item(self, inventory):
-    #     if 
+    def addItem(self, item):
+        self.inventory.append(item)
 
-    # def dropoff(self, inventory):
+    def removeItem(self, item):
+        self.inventory.remove(item)
+
+    def findItemByName(self, name):
+        for item in self.inventory:
+            if item.name.lower() == name.lower():
+                return item
+        return None
+
+    def hasLight(self):
+        return True
+
+    def dropItem(self, itemName):
+        itemToDrop = self.findItemByName(" ".join(itemName))
+        if itemToDrop is not None: 
+            self.removeItem(itemToDrop)
+            self.currentRoom.addItem(itemToDrop)
+            itemToDrop.on_drop()
+        else:
+            print("You are not holding anything")
