@@ -1,6 +1,6 @@
-# Write a class to hold player information, e.g. what room they are in
+    # Write a class to hold player information, e.g. what room they are in
 # currently.
-from room import Room
+# from room import Room
 
 class Player:
     def __init__(self, name, roomStart):
@@ -25,3 +25,7 @@ class Player:
             else: 
                 print("There is nothing there")
 
+    # def pickup_item(self, inventory):
+    #     if 
+
+    # def dropoff(self, inventory):
