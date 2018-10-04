@@ -3,7 +3,7 @@
 # from room import Room
 
 class Player:
-    def __init__(self, name, roomStart):
+    def __init__(self, name, roomStart, startingItems=[]):
         self.name = name
         self.currentRoom = roomStart
         self.inventory = []

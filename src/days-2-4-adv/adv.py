@@ -1,6 +1,6 @@
 from room import Room
 from player import Player
-from items import Items
+from items import Items, Food
 import textwrap
 # Declare all the rooms
 
@@ -26,11 +26,16 @@ earlier adventurers. The only exit is to the south."""),
 
 items = {
     'coins': Items("coins", "currency for transactions"),
-    'compass': Items("compass", "tool for finding your direction")
-    # 'compass': Items("compass", "tool for finding your direction")
-    # 'compass': Items("compass", "tool for finding your direction")
-    # 'compass': Items("compass", "tool for finding your direction")
+    'compass': Items("compass", "tool for finding your direction"),
+    'lantern': Items("lantern", "Make sure you keep this to see in the darkness"),
+    'sword': Items("compass", "tool for finding your direction"),
+    'compass': Items("compass", "tool for finding your direction"),
+    'bread': Food("bread", "Loaf of bread", 100),
+    'meat': Food("meat", "1lb tri-tip", 500)
 }
+
+
+
 
 # Link rooms together
 
@@ -44,30 +49,7 @@ room['narrow'].n_to = room['treasure']
 room['treasure'].s_to = room['narrow']
 
 # assigning the items to the room
-room['outside'].items.append(items["compass"]) 
-# room['foyer'].items.append(items["100 coins, "]) 
-# room['overlook'].items.append(items["compass"]) 
-# room['narrow'].items.append(items["compass"]) 
-# room['teasure'].items.append(items["compass"]) 
-# room[''].items = items["100 coins", "sword"] 
-# room['outside'].items = items["rock", "map"] 
-# room['foyer'].items = items["compass"] 
-# room['treasure'].items = items["1000 coins", "sword"] 
-# room['overlook'].items = items["shield"] 
 
-
-# Main
-# Make a new player object that is currently in the 'outside' room.
-# Write a loop that:
-# * Prints the current room name
-# * Prints the current description (the textwrap module might be useful here).
-# * Waits for user input and decides what to do.
-#
-# If the user enters a cardinal direction, attempt to move to the room there.
-# Print an error message if the movement isn't allowed.
-#
-# If the user enters "q", quit the game.
-# d = Player(input("Where do you want to go? "))
 
 s  = Player(input ("What is your name? "), room["outside"])
 

@@ -14,13 +14,12 @@ class Room:
         self.items = []
         # self.items = [sword, coins, puppies, rock]
 
-
     def __str__(self):
         return f"\n\n{self.name}\n\n {self.description}\n\n {self.items}\n"
     def getRoomInDirection(self, direction):
         if direction == "n":
             return self.n_to
-        elif direction == "s":
+        elif direction == "s":  
             return self.s_to
         elif direction == "e":
             return self.e_to
@@ -28,6 +27,7 @@ class Room:
             return self.w_to
         else:
             return None
+    
 
 
 """

@@ -1,3 +1,18 @@
+
+# Main
+# Make a new player object that is currently in the 'outside' room.
+# Write a loop that:
+# * Prints the current room name
+# * Prints the current description (the textwrap module might be useful here).
+# * Waits for user input and decides what to do.
+#
+# If the user enters a cardinal direction, attempt to move to the room there.
+# Print an error message if the movement isn't allowed.
+#
+# If the user enters "q", quit the game.
+# d = Player(input("Where do you want to go? "))
+
+
 ```
 # Item class
 class Item:
@@ -12,11 +27,17 @@ class Item:
         print(f"You have dropped {self.name}.")
 # adding a food class to items 
 class Food(Item):
+    # is the name and description variable pass through needed?
     def __init__(self, name, description, calories):
-        Item.__init__(self, name, description)
+        # bringing in the item class attributes
+        super().__init__(self, name, description)
+        # Item.__init__(self, name, description)
+        
         self.calories = calories
+    # eat function 
     def eat(self):
         return self.calories
+    # dropping your food
     def on_drop(self):
         print(f"You have dropped {self.name}.\nIt's not nice to play with your food!")
 # egg for the bonus
