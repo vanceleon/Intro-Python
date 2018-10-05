@@ -27,6 +27,7 @@ room = {
 items = {
     'coins': Items("coins", "currency for transactions"),
     'compass': Items("compass", "tool for finding your direction"),
+    'map': Items("map", "this will help you navigate your way through the rooms"),
     'lantern': Items("lantern", "Make sure you keep this to see in the darkness"),
     'sword': Items("sword", "weapon for self defense"),
     'bread': Food("bread", "Loaf of bread", 100),
@@ -37,7 +38,7 @@ items = {
 # assign the items to the room
 room['outside'].addItem(items['lantern'])
 room['narrow'].addItem(items['map'])
-room['teasure'].addItem(items['coins', 'meat'])
+room['treasure'].addItem(items['coins'])
 room['overlook'].addItem(items['sword'])
 room['foyer'].addItem(items['bread'])
 
@@ -67,7 +68,7 @@ direction_dictionary = {"n": "north", "s": "south", "w": "west", "e": "east", "f
 while True: 
     print(f"You are currently in {s.currentRoom.name}")
     print(f"Description: {s.currentRoom.description}")
-    print(f"Description: {s.currentRoom.items}")
+    print(f"You are currently carrying: {s.currentRoom.items} ")
     cmd = input("->").lower().split(" ")
     if len(cmd) == 1:
         if cmd[0] == "q":
@@ -76,7 +77,7 @@ while True:
             s.currentRoom = getattr(s.currentRoom, f"{cmd}_to")
             print(f"You are currently in {s.currentRoom.name}")
             print(f"Description: {s.currentRoom.description}")
-            print(f"Description: {s.currentRoom.items}")
+            print(f"You are currently carrying: {s.currentRoom.items}")
         else: 
             print("I don't understand that command")
     else:
