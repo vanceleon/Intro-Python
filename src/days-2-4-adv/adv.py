@@ -74,7 +74,7 @@ while True:
         if cmd[0] == "q":
             break
         elif cmd[0] in direction_dictionary:
-            s.currentRoom = getattr(s.currentRoom, f"{cmd}_to")
+            s.currentRoom = getattr(s.currentRoom, f"{cmd[0]}_to")
             print(f"You are currently in {s.currentRoom.name}")
             print(f"Description: {s.currentRoom.description}")
             print(f"You are currently carrying: {s.currentRoom.items}")

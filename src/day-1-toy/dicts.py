@@ -53,5 +53,7 @@ waypoints.append(    {
         "name": "Disney World",
     })
 
-for i in waypoints:
-    print(i)
+for x in waypoints:
+    print(x.values())
+# Add a new waypoint to the list
+# waypoints.append(dict({"lat": 3,"lon":-333,"name":"fake place"}))
